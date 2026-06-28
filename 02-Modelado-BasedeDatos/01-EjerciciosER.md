@@ -173,6 +173,25 @@ una empresa necesita registrar lo siguiente
 ## RACIONAL
 ![Ejercicio 5](../img/ER/5RACIONAL.png)
 
+## Ejercicio 6 
+
+## Diagrama ER
+ 
+![Ejercicio 6](../img/ER/erclas.png)
+
+## Racional
+![Ejercicio 6](../img/ER/6clases.png)
+
+
+## Ejercicio 7
+
+## Diagrama ER
+ 
+![Ejercicio 7](../img/ER/er7.png)
+
+## Racional
+![Ejercicio 7](../img/ER/7raci.png)
+
 
 ## Ejemplos mejorados de clase
 
