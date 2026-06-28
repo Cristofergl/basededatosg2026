@@ -1,7 +1,7 @@
 # Ejercicios del modelo E-R
 
 ## Ejercicio 1. 
-Un hopital registra informacion de sus pacientes: 
+Un hospital registra informacion de sus pacientes: 
 
 >De cada paciente se almacena: 
 - Numero de paciente que lo identifica 
@@ -28,6 +28,8 @@ Un hopital registra informacion de sus pacientes:
 - determinar la participacion de cada entidad 
 
 ![Ejercicio 1](../img/bd_hospital.drawio.png)
+## Racional
+![Ejercicio 1](../img/ER/1RACIONAL.png)
 
 
 ## Ejercicio 2
@@ -53,7 +55,9 @@ una universidd administra profesores y cursos
 3. puede exixtir un profesor que actualmente no imparte cursos
 4. Todo curso debe estar asignado a un profesor
 
-![Ejercicio 2](../img/ER/2.png)
+![Ejercicio 2](../img/ER/ER2.png)
+## Racional
+![Ejercicio 2](../img/ER/2Racional.png)
 
 ## ejercicio 3
 
@@ -78,6 +82,8 @@ Una escuela administra alumnos y materias
 
  Nota: a la relacion nombrarla **INSCRITO**     
  ![Ejercicio 3](../img/ER/Diagram.drawio)
+ ## RACIONAL
+  ![Ejercicio 3](../img/ER/3RACIONAL.png)
 
 ## ejercicio 4
 
@@ -107,6 +113,9 @@ una empresa dedicada a las ventas al por mayor necesita registrar lo siguiente
 9. El detalle almacena la cantidad vendida y el precio de venta 
 
  ![Ejercicio 4](../img/ER/4.png)
+ ## RACIONAL
+ ![Ejercicio 4](../img/ER/4RACIONAL.png)
+
 
 
 
@@ -160,3 +169,15 @@ una empresa necesita registrar lo siguiente
 10. Se desea llevar el control de los dependientes de cada empleado para fines de seguros
 
 ![Ejercicio 5](../img/ER/Diagrama%20sin.drawio)
+
+## RACIONAL
+![Ejercicio 5](../img/ER/5RACIONAL.png)
+
+
+## Ejemplos mejorados de clase
+
+## ER
+![Ejemplo mejorado de clase](../img/ER/6er.png)
+
+## Racional
+![Ejemplo mejorado de clase](../img/ER/6racional.png)
