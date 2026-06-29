@@ -84,8 +84,7 @@ Garantiza la integridad y el seguimiento continuo de los expedientes individuale
 | **RN-02** | Los folios de expedientes médicos son individuales; no pueden compartirse bajo ninguna circunstancia. |
 | **RN-03** | La fecha en que se abre el expediente no puede ser menor a la fecha de nacimiento registrada del paciente. |
 
-## 9. Diagrama Relacional
-![Ejercicio-Relacional1](../img/Relacional/Ejercicio-Relacional1.png)
+
 
 ---
 ---
@@ -183,8 +182,6 @@ El sistema gestiona los siguientes módulos:
 | **RN-02** | Un profesor tiene derecho a registrar todas las especialidades que validen su nivel académico. |
 | **RN-03** | El valor de los créditos asignados a cualquier asignatura debe ser obligatoriamente mayor a cero. |
 
-## 9. Diagrama Relacional
-![Ejercicio-Relacional2](../img/Relacional/Ejercicio-Relacional2.png)
 
 ---
 ---
@@ -284,9 +281,6 @@ Controla el flujo de las inscripciones escolares a través de:
 | **RN-01** | Un estudiante no puede dar de alta la misma asignatura más de una vez en el mismo periodo académico (Garantizado por PK compuesta). |
 | **RN-02** | El campo `calificacion` solo procesa valores numéricos dentro de la escala oficial institucional (0.00 a 10.00). |
 | **RN-03** | Toda materia debe tener asignados sus créditos correspondientes antes de abrirse el proceso de altas. |
-
-## 9. Diagrama Relacional
-![Ejercicio-Relacional3](../img/Relacional/Ejercicio-Relacional3.png)
 
 ---
 ---
@@ -518,8 +512,7 @@ Controla la infraestructura interna y de personal de la organización:
 - **RN-02:** Para mantener coherencia en el organigrama, un trabajador no puede ser supervisor directo de sí mismo (`jef_ssn` debe ser distinto de `ssn`).
 - **RN-03:** El campo `manager_ssn` es estrictamente exclusivo (`UNIQUE`), garantizando que un empleado lidere una sola división a la vez.
 
-## 8. Diagrama Relacional
-![Ejercicio-Relacional5](../img/Relacional/Ejercicio-Relacional5.png)
+
 
 ---
 ---
@@ -657,8 +650,7 @@ Esta versión evoluciona la arquitectura corporativa implementando claves subrog
 | **RN-02** | El campo `manager` de la tabla `DEPARTMENT` está limitado por una restricción `UNIQUE`, impidiendo la duplicidad de gerencias en un mismo empleado. |
 | **RN-03** | La bolsa de horas asignadas dentro de `WORKS_ON` solo computa valores numéricos iguales o mayores a cero. |
 
-## 9. Diagrama Relacional
-![DiagramaEmpresaV2](../img/Relacional/Ejercicio-Relacional5.1.png)
+
 
 ---
 ---
@@ -837,5 +829,3 @@ Esta base de datos unificada gestiona los flujos escolares e institucionales del
 - **RN-02 (Rango de Evaluaciones):** La inserción de valores numéricos en el campo `calif_final` de la tabla `CURSA` está condicionada de forma estricta a la escala aprobatoria oficial (0.00 a 10.00).
 - **RN-03 (Claves Compuestas):** Un alumno tiene permitido agregar múltiples números telefónicos de contacto, siempre y cuando no repita el identificador correlativo `id_telefono` en su cuenta personal.
 
-## 8. Diagrama Relacional
-![Ejercicio-Relacional6](../img/Relacional/Ejercicio-Relacional6.png)
