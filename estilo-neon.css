@@ -1,0 +1,4 @@
+/* Efecto de resplandor para el editor */
+.monaco-editor .view-lines {
+    text-shadow: 0 0 5px #00e5ff, 0 0 10px #00e5ff;
+}
