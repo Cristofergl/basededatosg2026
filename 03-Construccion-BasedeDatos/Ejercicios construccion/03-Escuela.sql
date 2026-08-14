@@ -1,8 +1,25 @@
--- 1. Crear una base de datos nueva
+-- 1. Crear una base de datos nueva (guarda idempotente)
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'control_escuela') IS NOT NULL
+BEGIN
+    ALTER DATABASE control_escuela SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE control_escuela;
+END
+GO
+
 CREATE DATABASE control_escuela;
 GO
 
 USE control_escuela;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero: inscrito -> materia/alumno)
+DROP TABLE IF EXISTS inscrito;
+DROP TABLE IF EXISTS materia;
+DROP TABLE IF EXISTS alumno;
 GO
 
 -- 2. Tabla Alumno

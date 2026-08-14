@@ -1,11 +1,3 @@
-
-03-seed-data-ventas.sql
-
-Página
-1
-/
-1
-100 %
 USE comercial_db;
 GO
 
@@ -1685,7 +1677,4 @@ INSERT INTO detalle_ventas(id_venta,id_producto,cantidad,precio,descuento) VALUE
 INSERT INTO detalle_ventas(id_venta,id_producto,cantidad,precio,descuento) VALUES(300,1,6,53.00,5);
 INSERT INTO detalle_ventas(id_venta,id_producto,cantidad,precio,descuento) VALUES(300,2,10,56.00,10);
 
-✕Merlin
-
-Mostrando 03-seed-data-ventas.sql.
-
+GO

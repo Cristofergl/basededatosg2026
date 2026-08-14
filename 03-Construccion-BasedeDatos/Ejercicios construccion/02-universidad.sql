@@ -1,6 +1,11 @@
 USE universidad;
 GO
 
+-- Limpieza previa para re-ejecución (hijas primero: curso -> profesor)
+DROP TABLE IF EXISTS curso;
+DROP TABLE IF EXISTS profesor;
+GO
+
 -- 1. Crear Profesor
 CREATE TABLE profesor (
     id_profesor INT PRIMARY KEY,
@@ -22,3 +27,4 @@ GO
 -- 3. Comprobar
 SELECT * FROM profesor;
 SELECT * FROM curso;
+GO

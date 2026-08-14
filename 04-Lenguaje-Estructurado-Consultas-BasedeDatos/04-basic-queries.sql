@@ -22,33 +22,35 @@ GO
 
 SELECT *
 FROM productos;
+GO
 
 
 --Proyectos
 SELECT
      codigo,
      Nombre,
-     Precio,
-
+     Precio
 FROM PRODUCTOS;
+GO
 
 
 SELECT
       codigo AS codigo_producto,
       nombre,
-      precio,
+      precio
  FROM productos;
+GO
 
  SELECT
  codigo AS codigo_producto,
- nombre codigo AS nombre_producto,
+ nombre AS nombre_producto,
  precio AS precio_producto
  FROM productos;
  GO
 
   SELECT
  codigo AS [codigo_producto],
- codigo AS [nombre_producto],
+ nombre AS [nombre_producto],
  precio AS [precio_producto]
  FROM productos;
  GO
@@ -72,7 +74,7 @@ SELECT
  
    SELECT
  codigo AS [codigo_producto],
- TRIM(UPPER(nombre))nombre AS 'nombre_producto',
+ TRIM(UPPER(nombre)) AS 'nombre_producto',
  precio AS precio_producto
  FROM productos;
  GO
@@ -88,16 +90,18 @@ SELECT
  SELECT
     productos.codigo,
       productos.nombre,
-      productos.precio,
-FROM productos; AS p;
+      productos.precio
+FROM productos;
+GO
 
 
 
  SELECT
     p.codigo,
     p.nombre,
-    p.precio,
-FROM productos; AS p;
+    p.precio
+FROM productos AS p;
+GO
 
 
 SELECT
@@ -109,6 +113,8 @@ SELECT
     p.existencia
 FROM categorias AS c
 INNER JOIN productos AS p
+ON c.id_categoria = p.id_categoria;
+GO
 
 -- Campos calculados - Columnas Calculadas
 -- Una columna calculada es el resultado de una expresión incluida en la
@@ -123,6 +129,7 @@ SELECT
     p.existencia * p.precio AS valor_inventario
 
     FROM productos AS p;
+GO
 
 
   /*==========================================================
@@ -164,12 +171,12 @@ GO
 -- descuento, importe_bruto (cantidad por el precio) y además el importe con descuento
 
 SELECT 
-    dv.id_detalle_venta, AS numero_venta,
+    dv.id_detalle_venta AS numero_venta,
     dv.cantidad,  
     dv.precio,
     dv.descuento,
     (dv.cantidad * dv.precio) AS importe_bruto,
-    (dv.cantidad * dv.precio *dv.descuento / 100.0)AS importe_con_descuento
+    (dv.cantidad * dv.precio) - (dv.cantidad * dv.precio * dv.descuento / 100.0) AS importe_con_descuento
 FROM detalle_ventas AS dv;
 GO
 
@@ -187,28 +194,28 @@ GO
 --Elimina de resultado las filas que tengan valores repetidos en todas
 --las columnas seleccionadas
 
-SELECT  c.sexo
+SELECT c.sexo
+FROM clientes AS c;
 
 SELECT COUNT(c.sexo) AS cantidad_sexo
 FROM clientes AS c;
 
-
-FROM clientes AS c;
-
 SELECT COUNT (DISTINCT sexo) AS numero_sexos
-
 FROM clientes AS c;
+GO
 
-
--seleccinar los distintos descuentos que se realizan a las ventas
-
+-- Seleccionar los distintos descuentos que se realizan a las ventas
 -- Seleccionar los distintos descuentos que se realizan a las ventas
 SELECT DISTINCT 
     descuento
 FROM detalle_ventas;
 GO
 
---TODO; VER DISTINCT  CON MAS DE UN CAMPO
-
-
-
+-- DISTINCT CON MAS DE UN CAMPO
+-- [CONSULTA INCOMPLETA, corregida como comentario] -- la consulta original solo dejaba el TODO sin terminar
+SELECT DISTINCT
+    id_categoria,
+    id_producto
+FROM productos
+ORDER BY id_categoria DESC;
+GO

@@ -1,7 +1,46 @@
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'control_empresa') IS NOT NULL
+BEGIN
+    ALTER DATABASE control_empresa SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE control_empresa;
+END
+GO
+
 CREATE DATABASE control_empresa;
 GO
 
 USE control_empresa;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero)
+IF OBJECT_ID(N'dbo.DEPARTAMENTO', N'U') IS NOT NULL
+BEGIN
+    DECLARE @fk_administrador sysname;
+    SELECT @fk_administrador = fk.name
+    FROM sys.foreign_keys fk
+    INNER JOIN sys.tables pt ON fk.parent_object_id = pt.object_id
+    INNER JOIN sys.tables rt ON fk.referenced_object_id = rt.object_id
+    WHERE pt.name = 'DEPARTAMENTO' AND rt.name = 'EMPLEADO';
+    IF @fk_administrador IS NOT NULL
+    BEGIN
+        DECLARE @sql_administrador nvarchar(max) = N'ALTER TABLE dbo.DEPARTAMENTO DROP CONSTRAINT ' + QUOTENAME(@fk_administrador);
+        EXEC(@sql_administrador);
+    END
+END
+GO
+
+DROP TABLE IF EXISTS SUCURSAL_TELEFONO;
+DROP TABLE IF EXISTS PARTICIPA;
+DROP TABLE IF EXISTS ASISTIR;
+DROP TABLE IF EXISTS EMPLEADO;
+DROP TABLE IF EXISTS DEPARTAMENTO;
+DROP TABLE IF EXISTS PROYECTO;
+DROP TABLE IF EXISTS CAPACITACIONES;
+DROP TABLE IF EXISTS PUESTO;
+DROP TABLE IF EXISTS SUCURSAL;
 GO
 
 -- 1. SUCURSAL
@@ -80,7 +119,7 @@ GO
 -- Llave de Administrador en Departamento (Relación ADMINISTRA 1:N)
 ALTER TABLE DEPARTAMENTO
 ADD num_empl_administrador INT,
-FOREIGN KEY (num_empl_administrador) REFERENCES EMPLEADO(num_empl);
+CONSTRAINT fk_departamento_administrador FOREIGN KEY (num_empl_administrador) REFERENCES EMPLEADO(num_empl);
 GO
 
 -- 7. PARTICIPA (Relacion N:M entre Empleado y Proyecto)

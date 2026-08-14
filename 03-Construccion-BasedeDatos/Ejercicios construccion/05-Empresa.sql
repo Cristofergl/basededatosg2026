@@ -1,7 +1,43 @@
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'empresa') IS NOT NULL
+BEGIN
+    ALTER DATABASE empresa SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE empresa;
+END
+GO
+
 CREATE DATABASE empresa;
 GO
 
 USE empresa;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero)
+IF OBJECT_ID(N'dbo.departamento', N'U') IS NOT NULL
+BEGIN
+    DECLARE @fk_gerente sysname;
+    SELECT @fk_gerente = fk.name
+    FROM sys.foreign_keys fk
+    INNER JOIN sys.tables pt ON fk.parent_object_id = pt.object_id
+    INNER JOIN sys.tables rt ON fk.referenced_object_id = rt.object_id
+    WHERE pt.name = 'departamento' AND rt.name = 'empleado';
+    IF @fk_gerente IS NOT NULL
+    BEGIN
+        DECLARE @sql_gerente nvarchar(max) = N'ALTER TABLE dbo.departamento DROP CONSTRAINT ' + QUOTENAME(@fk_gerente);
+        EXEC(@sql_gerente);
+    END
+END
+GO
+
+DROP TABLE IF EXISTS dependiente;
+DROP TABLE IF EXISTS empleado_proyecto;
+DROP TABLE IF EXISTS proyecto;
+DROP TABLE IF EXISTS empleado;
+DROP TABLE IF EXISTS ubicacion_depto;
+DROP TABLE IF EXISTS departamento;
 GO
 
 CREATE TABLE departamento(
@@ -35,7 +71,7 @@ GO
 
 ALTER TABLE departamento
 ADD nss_gerente INT,
-FOREIGN KEY (nss_gerente) REFERENCES empleado(nss);
+CONSTRAINT fk_departamento_gerente FOREIGN KEY (nss_gerente) REFERENCES empleado(nss);
 GO
 
 CREATE TABLE proyecto(

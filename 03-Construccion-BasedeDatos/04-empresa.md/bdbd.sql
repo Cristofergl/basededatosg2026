@@ -3,8 +3,9 @@
 -- =========================================================
 USE master;
 GO
--- Si la base de datos ya existe, la borramos para empezar limpio
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'universidad')
+-- Si la base de datos no existe, la creamos (guarda idempotente)
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'universidad') IS NOT NULL
 BEGIN
     ALTER DATABASE universidad SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE universidad;
@@ -13,8 +14,21 @@ GO
 
 CREATE DATABASE universidad;
 GO
+
 USE universidad;
-GO 
+GO
+
+-- Limpieza previa para re-ejecución (en esta parte no hay dependencias de FK)
+DROP TABLE IF EXISTS materia_2;
+DROP TABLE IF EXISTS producto;
+DROP TABLE IF EXISTS categoria;
+DROP TABLE IF EXISTS materia;
+DROP TABLE IF EXISTS profesor;
+DROP TABLE IF EXISTS alumno_4;
+DROP TABLE IF EXISTS alumno_3;
+DROP TABLE IF EXISTS alumno_2;
+DROP TABLE IF EXISTS alumno;
+GO
 
 CREATE TABLE alumno(
     alumno_id INT,
@@ -50,6 +64,7 @@ GO
 
 INSERT INTO alumno_4 VALUES (1, 'Panfilo', 'correo@correo.com');
 INSERT INTO alumno_4 VALUES (2, 'Monico', 'correo2@correo.com');
+GO
 
 CREATE TABLE profesor (
     profesor_id INT NOT NULL IDENTITY (1,1),
@@ -62,6 +77,7 @@ GO
 INSERT INTO profesor VALUES ('German', 29), ('Mari', 22);
 
 SELECT * FROM profesor;
+GO
 
 CREATE TABLE materia(
     materia_id INT NOT NULL IDENTITY(1,1),
@@ -73,6 +89,7 @@ GO
 
 INSERT INTO materia VALUES('correo@correo.com');
 INSERT INTO materia VALUES('correo2@correo.com');
+GO
 
 -- Estructura CATEGORIA
 CREATE TABLE categoria(
@@ -88,6 +105,7 @@ INSERT INTO categoria VALUES('Carnes Frias', 1);
 INSERT INTO categoria VALUES('Carnes Frias Duplicado', DEFAULT); 
 INSERT INTO categoria VALUES('Carnes calientes', DEFAULT);
 INSERT INTO categoria (nombre) VALUES('Chochos');
+GO
 
 -- Estructura PRODUCTO (Opción de construcción 3)
 CREATE TABLE producto(
@@ -115,6 +133,7 @@ INSERT INTO producto VALUES(5, 'Quemadita 2', NULL, 200, 100, DEFAULT);
 INSERT INTO producto (producto_id, nombre, existencia, precio) VALUES(6, 'Pantera rosa 2', 47, 80);
 
 SELECT * FROM producto;
+GO
 
 
 -- =========================================================
@@ -122,7 +141,8 @@ SELECT * FROM producto;
 -- =========================================================
 USE master;
 GO
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'empresa_patito')
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'empresa_patito') IS NOT NULL
 BEGIN
     ALTER DATABASE empresa_patito SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE empresa_patito;
@@ -131,7 +151,13 @@ GO
 
 CREATE DATABASE empresa_patito;
 GO
+
 USE empresa_patito;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero: producto -> provedor)
+DROP TABLE IF EXISTS producto;
+DROP TABLE IF EXISTS provedor;
 GO
 
 CREATE TABLE provedor(
@@ -167,7 +193,8 @@ GO
 -- =========================================================
 USE master;
 GO
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'construccion')
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'construccion') IS NOT NULL
 BEGIN
     ALTER DATABASE construccion SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE construccion;
@@ -176,7 +203,13 @@ GO
 
 CREATE DATABASE construccion;
 GO
+
 USE construccion;
+GO
+
+-- Limpieza previa para re-ejecución del ESCENARIO A (hijas primero: telefono -> cliente)
+DROP TABLE IF EXISTS telefono;
+DROP TABLE IF EXISTS cliente;
 GO
 
 -- ESCENARIO A: NO ACTION
@@ -215,6 +248,7 @@ INSERT INTO telefono(numero_telefono, cliente_id) VALUES ('773-123-4567', 1);
 INSERT INTO telefono(numero_telefono, cliente_id) VALUES ('455-123-4568', 1);
 INSERT INTO telefono(numero_telefono, cliente_id) VALUES ('561-123-4569', 2);
 INSERT INTO telefono(numero_telefono, cliente_id) VALUES ('773-146-2476', 2);
+GO
 
 -- ELIMINAR CON ON DELETE EN NO ACTION
 DELETE FROM telefono WHERE cliente_id = 1;
@@ -227,6 +261,7 @@ SELECT * FROM telefono;
 UPDATE telefono SET cliente_id = NULL WHERE cliente_id = 2;
 UPDATE cliente SET cliente_id = 3 WHERE cliente_id = 2;
 UPDATE telefono SET cliente_id = 3 WHERE cliente_id IS NULL;
+GO
 
 
 -- ESCENARIO B: ON DELETE Y ON UPDATE SET NULL

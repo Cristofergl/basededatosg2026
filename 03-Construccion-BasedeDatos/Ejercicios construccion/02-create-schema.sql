@@ -1,11 +1,32 @@
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'comercial_db')
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'comercial_db') IS NOT NULL
 BEGIN
-    CREATE DATABASE comercial_db;
+    ALTER DATABASE comercial_db SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE comercial_db;
 END
+GO
+
+CREATE DATABASE comercial_db;
 GO
 
 
 USE comercial_db;
+GO
+
+-- Limpieza previa para re-ejecución (orden correcto: tablas hijas primero)
+DROP TABLE IF EXISTS detalle_ventas;
+DROP TABLE IF EXISTS ventas;
+DROP TABLE IF EXISTS productos;
+DROP TABLE IF EXISTS empleados;
+DROP TABLE IF EXISTS proveedores;
+DROP TABLE IF EXISTS clientes;
+DROP TABLE IF EXISTS ciudades;
+DROP TABLE IF EXISTS estados;
+DROP TABLE IF EXISTS categorias;
+DROP TABLE IF EXISTS departamentos;
 GO
 
 

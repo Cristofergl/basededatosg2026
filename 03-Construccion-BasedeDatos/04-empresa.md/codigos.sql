@@ -1,8 +1,34 @@
--- 1. CREACIÓN DE LA BASE DE DATOS
+-- 1. CREACIÓN DE LA BASE DE DATOS (guarda idempotente)
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'control_empleados') IS NOT NULL
+BEGIN
+    ALTER DATABASE control_empleados SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE control_empleados;
+END
+GO
+
 CREATE DATABASE control_empleados;
 GO
 
 USE control_empleados;
+GO
+
+-- Limpieza previa para re-ejecución (orden correcto: tablas hijas primero)
+DROP TABLE IF EXISTS sucursal_telefono;
+DROP TABLE IF EXISTS asistir;
+DROP TABLE IF EXISTS participa;
+IF OBJECT_ID(N'dbo.departamento', N'U') IS NOT NULL
+    ALTER TABLE departamento DROP CONSTRAINT IF EXISTS fk_departamento_administrador;
+GO
+DROP TABLE IF EXISTS empleado;
+DROP TABLE IF EXISTS departamento;
+DROP TABLE IF EXISTS proyecto;
+DROP TABLE IF EXISTS capacitaciones;
+DROP TABLE IF EXISTS puesto;
+DROP TABLE IF EXISTS sucursal;
 GO
 
 -- ====================================================================
@@ -178,3 +204,4 @@ SELECT * FROM departamento;
 SELECT * FROM empleado;
 SELECT * FROM participa;
 SELECT * FROM asistir;
+GO

@@ -1,13 +1,37 @@
 
-Se Se realizó la documentación de los tipos de lenguaje SQL y sus comandos correspondientes. Además se comenzó la creación de tablas con SQL-LDD, comando CREATE, se realizaron los constraints de Dominio, valores Nulos, Primary key y Unique, así como campos IDENTITY.
+-- Se realizó la documentación de los tipos de lenguaje SQL y sus comandos correspondientes.
+-- Además se comenzó la creación de tablas con SQL-LDD, comando CREATE, se realizaron los
+-- constraints de Dominio, valores Nulos, Primary key y Unique, así como campos IDENTITY.
 
 
--- Creamos una base de datos
+-- Creamos una base de datos (guarda idempotente: solo se crea si no existe)
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'universidad') IS NOT NULL
+BEGIN
+    ALTER DATABASE universidad SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE universidad;
+END
+GO
+
 CREATE DATABASE universidad;
 GO
 
 -- utilizamos la base de datos
 USE universidad;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero)
+DROP TABLE IF EXISTS materia_2;
+DROP TABLE IF EXISTS materia;
+DROP TABLE IF EXISTS curso;
+DROP TABLE IF EXISTS profesor;
+DROP TABLE IF EXISTS alumno_4;
+DROP TABLE IF EXISTS alumno_3;
+DROP TABLE IF EXISTS alumno_2;
+DROP TABLE IF EXISTS alumno;
 GO
 
 -- creamos una una tabla
@@ -46,19 +70,17 @@ CREATE TABLE alumno_3 (
 );
 GO
 
-CREATE TABLE alumno_4 (
-    alumno_id INT NOT NULL,
-    nombre VARCHAR(100),
-    correo VARCHAR(40),
-    CONSTRAINT pk_alumno_4 
-);
-GO
+-- CORRECCIÓN: se eliminó el segundo CREATE TABLE alumno_4 duplicado (líneas siguientes del original),
+-- que declaraba una CONSTRAINT pk_alumno_4 huérfana sin definición válida. La tabla alumno_4
+-- válida ya fue creada arriba.
 
 INSERT INTO alumno_4
 VALUES (1, 'Panfilo', 'correo@correo.com');
+GO
 
 INSERT INTO alumno_4
 VALUES (2, 'Monica', 'correo2@correo.com');
+GO
 
 
 
@@ -97,8 +119,13 @@ CREATE TABLE materia_2(
     UNIQUE (correo)
 );
 GO
+
+-- CORRECCIÓN: el segundo INSERT original usaba el mismo correo ('correo@correo.com') que el primero,
+-- lo que violaría el UNIQUE. Se ajustó el segundo correo para que ambos INSERTs sean válidos.
 INSERT INTO materia_2
 VALUES ('correo@correo.com');
+GO
 
 INSERT INTO materia_2
-VALUES ('correo@correo.com');
+VALUES ('correo2@correo.com');
+GO

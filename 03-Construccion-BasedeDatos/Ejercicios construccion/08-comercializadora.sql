@@ -1,20 +1,32 @@
 
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'comercializadora')
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'comercializadora') IS NOT NULL
 BEGIN
-    CREATE DATABASE comercializadora;
+    ALTER DATABASE comercializadora SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE comercializadora;
 END
+GO
+
+CREATE DATABASE comercializadora;
 GO
 
 
 USE comercializadora;
 GO
 
--- 1. Eliminar restricciones de llave foránea para poder borrar tablas en orden
-ALTER TABLE oficina DROP CONSTRAINT IF EXISTS fk_oficina_representante;
-ALTER TABLE cliente DROP CONSTRAINT IF EXISTS fk_cliente_representante;
-GO
+-- CORRECCIÓN: se ELIMINARON los dos ALTER TABLE ... DROP CONSTRAINT del inicio del archivo original
+-- (fk_oficina_representante y fk_cliente_representante). Se ejecutaban ANTES de que existieran las
+-- tablas y fallaban en una ejecución limpia. El script ya elimina las tablas en orden abajo,
+-- y las llaves foráneas se vuelven a crear al final del script.
 
 -- 2. Eliminar tablas si existen
+IF OBJECT_ID(N'dbo.oficina', N'U') IS NOT NULL
+    ALTER TABLE oficina DROP CONSTRAINT IF EXISTS fk_oficina_representante;
+GO
+
 DROP TABLE IF EXISTS detalle_pedido;
 DROP TABLE IF EXISTS pedido;
 DROP TABLE IF EXISTS cliente;

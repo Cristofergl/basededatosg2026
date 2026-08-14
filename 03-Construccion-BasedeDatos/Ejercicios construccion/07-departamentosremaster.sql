@@ -1,7 +1,43 @@
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'ejercicio7') IS NOT NULL
+BEGIN
+    ALTER DATABASE ejercicio7 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE ejercicio7;
+END
+GO
+
 CREATE DATABASE ejercicio7;
 GO
 
 USE ejercicio7;
+GO
+
+-- Limpieza previa para re-ejecución (hijas primero)
+IF OBJECT_ID(N'dbo.Department', N'U') IS NOT NULL
+BEGIN
+    DECLARE @fk_manager sysname;
+    SELECT @fk_manager = fk.name
+    FROM sys.foreign_keys fk
+    INNER JOIN sys.tables pt ON fk.parent_object_id = pt.object_id
+    INNER JOIN sys.tables rt ON fk.referenced_object_id = rt.object_id
+    WHERE pt.name = 'Department' AND rt.name = 'Employee';
+    IF @fk_manager IS NOT NULL
+    BEGIN
+        DECLARE @sql_manager nvarchar(max) = N'ALTER TABLE dbo.Department DROP CONSTRAINT ' + QUOTENAME(@fk_manager);
+        EXEC(@sql_manager);
+    END
+END
+GO
+
+DROP TABLE IF EXISTS works_on;
+DROP TABLE IF EXISTS Dependent;
+DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS Location;
+DROP TABLE IF EXISTS Department;
 GO
 
 CREATE TABLE Department(
@@ -37,7 +73,7 @@ GO
 
 ALTER TABLE Department
 ADD manager_ssn_fk_unique INT UNIQUE,
-FOREIGN KEY (manager_ssn_fk_unique) REFERENCES Employee(numemploy);
+CONSTRAINT fk_department_manager FOREIGN KEY (manager_ssn_fk_unique) REFERENCES Employee(numemploy);
 GO
 
 CREATE TABLE Project(

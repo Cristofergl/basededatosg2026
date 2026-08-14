@@ -1,3 +1,7 @@
+-- Practica: consultar todas las tablas de comercial_db
+USE comercial_db;
+GO
+
 SELECT * FROM [dbo].[categorias];
 SELECT * FROM [dbo].[ciudades];
 SELECT * FROM [dbo].[clientes];
@@ -7,4 +11,5 @@ SELECT * FROM [dbo].[empleados];
 SELECT * FROM [dbo].[estados];
 SELECT * FROM [dbo].[productos];
 SELECT * FROM [dbo].[proveedores];
-SELECT * FROM [dbo].[ventas]
+SELECT * FROM [dbo].[ventas];
+GO

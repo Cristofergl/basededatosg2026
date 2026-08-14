@@ -36,6 +36,7 @@ Por que no se recomienda utilizarlo simpre
 
 SELECT * 
 FROM productos;
+GO
 
 
 -- Proyeccion
@@ -55,36 +56,42 @@ SELECT
 	nombre,
 	precio
 FROM productos;
+GO
 
 SELECT 
 	codigo AS codigo_producto,
 	nombre AS nombre_producto,
 	precio AS precio_producto
 FROM productos;
+GO
 
 SELECT 
 	codigo AS [codigo producto],
 	nombre AS [nombre producto],
 	precio AS [precio producto]
 FROM productos;
+GO
 
 SELECT 
 	codigo AS 'codigo producto',
 	nombre AS 'nombre producto',
 	precio AS 'precio producto'
 FROM productos;
+GO
 
 SELECT 
 	codigo  'codigo producto',
 	nombre  'nombre producto',
 	precio  'precio producto'
 FROM productos;
+GO
 
 SELECT 
 	codigo AS [codigo producto],
 	TRIM(UPPER(nombre)) AS 'nombre producto',
 	precio AS precio_producto
 FROM productos;
+GO
 
 -- ALIAS DE TABLA
 -- tambien se puede asignar un alias temporal a una tabla
@@ -100,6 +107,7 @@ SELECT
 	p.nombre,
 	p.precio
 FROM productos AS p;
+GO
 
 SELECT 
 	c.id_categoria AS [#Categoria],
@@ -126,6 +134,7 @@ SELECT
 	p.existencia,
 	p.existencia * p.precio AS valor_inventario
 FROM productos AS p;
+GO
 
 
 
@@ -163,6 +172,7 @@ SELECT
 	(dv.cantidad * dv.precio) AS importe_bruto,
 	(((dv.cantidad * dv.precio) * dv.descuento)/100.0) AS importe_descuento
 FROM detalle_ventas AS dv;
+GO
 
 /*=====================================
 OPERADORES ARITMETICOS EN SQL SERVER
@@ -182,19 +192,24 @@ OPERADORES ARITMETICOS EN SQL SERVER
 
 SELECT c.sexo
 FROM clientes AS c;
+GO
 
 SELECT COUNT (c.sexo) AS cantidad_sexo
 FROM clientes AS c;
+GO
 
 SELECT DISTINCT c.sexo
 FROM clientes AS c; 
+GO
 
 SELECT COUNT(DISTINCT c.sexo) AS numero_sexos
 FROM clientes AS c; 
+GO
 
 SELECT COUNT(sexo) AS [mujeres] 
 FROM clientes
 WHERE sexo = 'M';
+GO
 
 -- Seleccionar los distintos descuentos que se realizan a las ventas 
 
@@ -208,9 +223,11 @@ GO
 -- El distinct no garantiza el orden
 SELECT COUNT(DISTINCT d.descuento) AS numero_detalle
 FROM detalle_ventas AS d; 
+GO
 
 
 SELECT * FROM productos;
+GO
 
 -- DISTINCT CON MAS DE UN CAMPO
 -- Cuando el DISTINCT se utiliza con varias columnas, se evalua la 
@@ -235,6 +252,7 @@ precio
 
 FROM productos
 ORDER BY precio DESC;
+GO
 
 
 SELECT
@@ -242,6 +260,7 @@ SELECT
 
 
 FROM clientes;
+GO
 
 
 --TOP con expresiones calculadas
@@ -252,6 +271,7 @@ precio,
 existencia,
 (precio * existencia) AS valor_inventario
 FROM productos;
+GO
 
 --top con porcentaje
 
@@ -263,10 +283,11 @@ precio,
 existencia,
 (precio * existencia) AS valor_inventario
 FROM productos;
+GO
 
 --Convinar el sitinct con el top
 
 SELECT
 descuento
 FROM detalle_ventas;
-
+GO

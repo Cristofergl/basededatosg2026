@@ -2,7 +2,14 @@
 USE bdejemplo;
 GO
 
--- 2. Creación de la tabla adaptada a SQL Server
+-- 2. Limpieza previa para que el script sea re-ejecutable
+-- (Orden correcto: tablas hijas primero por la FK producto2 -> categoria2)
+DROP TABLE IF EXISTS producto2;
+DROP TABLE IF EXISTS categoria2;
+DROP TABLE IF EXISTS alumno;
+GO
+
+-- 3. Creación de la tabla adaptada a SQL Server
 CREATE TABLE alumno (
     idAlumno INT IDENTITY(1,1) NOT NULL, -- Se cambió AUTO_INCREMENT por IDENTITY
     nombre VARCHAR(30) NOT NULL,
@@ -16,7 +23,7 @@ CREATE TABLE alumno (
 ); -- Se eliminó ENGINE=InnoDB DEFAULT CHARSET... ya que SQL Server lo maneja a nivel de instancia/BD
 GO
 
--- 3. Inserts Corregidos (Se quitaron los ID manuales '1' y '2' para que el orden de los datos coincida exactamente con las columnas)
+-- 4. Inserts Corregidos (Se quitaron los ID manuales '1' y '2' para que el orden de los datos coincida exactamente con las columnas)
 INSERT INTO alumno (nombre, apellidoPaterno, apellidoMaterno, fechaNaci, calle, numeroInt, numeroExt)
 VALUES ('MONSERRAT', 'MUÑOS', NULL, '2007-07-17', 'CALLE DEL INFIERNO', NULL, 666);
 GO
@@ -26,46 +33,31 @@ VALUES ('Irving', 'ANDABLO', 'ISLAS' , '2007-06-16', 'CALLE DELCIELO', NULL, NUL
 GO
 
 INSERT INTO alumno (nombre, apellidoPaterno, apellidoMaterno, fechaNaci, calle, numeroInt, numeroExt)
-VALUES ('MONSERRAT', 'MUÑOS', NULL, '2007-07-17', 'CALLE DEL INFIERNO', NULL, 666);
-GO
-INSERT INTO alumno (nombre, apellidoPaterno, apellidoMaterno, fechaNaci, calle, numeroInt, numeroExt)
 VALUES ('Cristofer', 'Garcia', NULL, '2007-11-03', 'Conocida', NULL, 666);
 GO
 
-
--- 4. Consulta de verificación
+-- 5. Consulta de verificación
 SELECT * FROM alumno;
 GO
 
-
-
--- 4. Consulta de verificación
-SELECT * FROM alumno;
-GO
-
-
---Razon de cardinalidad
+-- Razon de cardinalidad
 
 CREATE TABLE categoria2(
-categoriaID INT NOT NULL,
-nombre VARCHAR(20) NOT NULL,
-CONSTRAINT pk_categoria2
-PRIMARY KEY (categoriaid)
+    categoriaID INT NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    CONSTRAINT pk_categoria2
+    PRIMARY KEY (categoriaid)
 );
-
+GO
 
 CREATE TABLE producto2(
-productoid INT NOT NULL PRIMARY KEY,
-nombre VARCHAR(35) NOT NULL,
-existencia INT NOT NULL,
-precio DECIMAL(10,2) NOT NULL,
-categoriaID INT,
-CONSTRAINT fk_producto2_categoria2
-FOREIGN KEY (categoriaid)
-REFERENCES categoria2(categoriaid)
+    productoid INT NOT NULL PRIMARY KEY,
+    nombre VARCHAR(35) NOT NULL,
+    existencia INT NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    categoriaID INT,
+    CONSTRAINT fk_producto2_categoria2
+    FOREIGN KEY (categoriaid)
+    REFERENCES categoria2(categoriaid)
 );
-
-
-
-
-
+GO

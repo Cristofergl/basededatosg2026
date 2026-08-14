@@ -1,8 +1,16 @@
--- Validar si la base de datos existe
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'escuelita')
+-- Validar si la base de datos existe (guarda idempotente)
+USE master;
+GO
+
+-- Recreación idempotente: elimina la BD si existe y la crea desde cero
+IF DB_ID(N'escuelita') IS NOT NULL
 BEGIN
-    CREATE DATABASE escuelita;
+    ALTER DATABASE escuelita SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE escuelita;
 END
+GO
+
+CREATE DATABASE escuelita;
 GO
 
 USE escuelita;
@@ -131,8 +139,15 @@ GO
 -- ALTER TABLE alumno DROP CONSTRAINT ck_alumno_edad;
 
 -- Agregar matrícula con tipo de dato y restricciones corregidas
-ALTER TABLE alumno ADD matricula VARCHAR(12) NOT NULL;
+-- (Se agregó la guarda defensiva para que el script sea re-ejecutable)
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('alumno') AND name = 'matricula')
+BEGIN
+    ALTER TABLE alumno ADD matricula VARCHAR(12) NOT NULL;
+END
 GO
 
-ALTER TABLE alumno ADD CONSTRAINT uq_alumno_matricula UNIQUE (matricula);
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('uq_alumno_matricula') AND parent_object_id = OBJECT_ID('alumno'))
+BEGIN
+    ALTER TABLE alumno ADD CONSTRAINT uq_alumno_matricula UNIQUE (matricula);
+END
 GO
